@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: [:show, :edit, :update, :destroy]
+  require 'mechanize'
 
   # GET /profiles
   # GET /profiles.json
@@ -25,6 +26,8 @@ class ProfilesController < ApplicationController
   # POST /profiles.json
   def create
     @profile = Profile.new(profile_params)
+    agent = Mechanize.new
+    profile_html = agent.get(profile_params[:profile_url])
 
     respond_to do |format|
       if @profile.save

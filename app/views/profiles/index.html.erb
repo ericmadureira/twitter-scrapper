@@ -3,8 +3,8 @@
 <h1>Profiles List</h1>
 
 <%= search_form_for @q do |f| %>
-  <%= f.label :name_cont %>
-  <%= f.search_field :name_cont %>
+  <%= f.label :name_or_user_or_description_cont %>
+  <%= f.search_field :name_or_user_or_description_cont %>
 
   <%= f.submit %>
 <% end %>
@@ -26,7 +26,6 @@
         <td><%= profile.profile_url %></td>
         <td><%= link_to 'Show', profile %></td>
         <td><%= link_to 'Edit', edit_profile_path(profile) %></td>
-        <td><%= link_to 'Destroy', profile, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

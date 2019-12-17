@@ -28,6 +28,8 @@ class ProfilesController < ApplicationController
     @profile = Profile.new(profile_params)
     agent = Mechanize.new
     profile_html = agent.get(profile_params[:profile_url])
+    @profile.description = profile_html.search(".ProfileHeaderCard-bio").text
+    @profile.user = profile_html.search(".ProfileHeaderCard-screenname").text
 
     respond_to do |format|
       if @profile.save

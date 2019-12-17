@@ -5,7 +5,8 @@ class ProfilesController < ApplicationController
   # GET /profiles
   # GET /profiles.json
   def index
-    @profiles = Profile.all
+    @q = Profile.ransack(params[:q])
+    @profiles = @q.result(distinct: true)
   end
 
   # GET /profiles/1
@@ -30,6 +31,7 @@ class ProfilesController < ApplicationController
     profile_html = agent.get(profile_params[:profile_url])
     @profile.description = profile_html.search(".ProfileHeaderCard-bio").text
     @profile.user = profile_html.search(".ProfileHeaderCard-screenname").text
+    @profile.profile_url = Shortener::ShortenedUrl.generate(profile_params[:profile_url]).url
 
     respond_to do |format|
       if @profile.save
@@ -45,6 +47,7 @@ class ProfilesController < ApplicationController
   # PATCH/PUT /profiles/1
   # PATCH/PUT /profiles/1.json
   def update
+    @profile.profile_url = Shortener::ShortenedUrl.generate(profile_params[:profile_url]).url
     respond_to do |format|
       if @profile.update(profile_params)
         format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
